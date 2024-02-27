@@ -32,7 +32,7 @@ describe("Rover class", function() {
 
   it("responds correctly to the mode change command", function() {
     let testRover = new Rover();
-    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK'), {mode:'LOW_POWER', generatorWatts:110, position: 98382}]))).toMatchObject({message:'testName',results:[new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK'), {mode:'LOW_POWER', generatorWatts:110, position: 98382}] });
+    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK'), {mode:'LOW_POWER', generatorWatts:110, position: 98382}]))).toMatchObject({message:'testName',results:[{commandType:'MODE_CHANGE', value:'LOW_POWER'}, {commandType:'STATUS_CHECK'}, {mode:'LOW_POWER', generatorWatts:110, position: 98382}] });
   });
 
 });
