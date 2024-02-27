@@ -17,17 +17,17 @@ describe("Rover class", function() {
 
    it("response returned by receiveMessage contains the name of the message", function() {
      let testRover = new Rover();
-     expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')] });
+     expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{commandType:'MODE_CHANGE', value:'LOW_POWER'}, {commandType:'STATUS_CHECK'}] });
    });
 
   it("response returned by receiveMessage includes two results if two commands are sent in the message", function() {
     let testRover = new Rover();
-    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')] });
+    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{commandType:'MODE_CHANGE', value:'LOW_POWER'}, {commandType:'STATUS_CHECK'}] });
   });
 
   it("responds correctly to the status check command", function() {
     let testRover = new Rover();
-    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK'), {mode:'LOW_POWER', generatorWatts:110, position: 98382}]))).toMatchObject({message:'testName',results:[new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK'), {mode:'LOW_POWER', generatorWatts:110, position: 98382}] });
+    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK'), {mode:'LOW_POWER', generatorWatts:110, position: 98382}]))).toMatchObject({message:'testName',results:[{commandType:'MODE_CHANGE', value:'LOW_POWER'}, {commandType:'STATUS_CHECK'}, {mode:'LOW_POWER', generatorWatts:110, position: 98382}] });
   });
 
   it("responds correctly to the mode change command", function() {
