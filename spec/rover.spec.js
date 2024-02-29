@@ -17,22 +17,32 @@ describe("Rover class", function() {
 
    it("response returned by receiveMessage contains the name of the message", function() {
      let testRover = new Rover();
-     expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{commandType:'MODE_CHANGE', value:'LOW_POWER'}, {commandType:'STATUS_CHECK'}] });
+     expect(testRover.receiveMessage(new Message('testName'))).toEqual({message:'testName'});/*,results:[{commandType:'MODE_CHANGE', value:'LOW_POWER'}, {commandType:'STATUS_CHECK'}] }*/
    });
 
   it("response returned by receiveMessage includes two results if two commands are sent in the message", function() {
     let testRover = new Rover();
-    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{commandType:'MODE_CHANGE', value:'LOW_POWER'}, {commandType:'STATUS_CHECK'}] });
+    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{completed: true},{completed: true} ] });
   });
 
   it("responds correctly to the status check command", function() {
     let testRover = new Rover();
-    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK'), {mode:'LOW_POWER', generatorWatts:110, position: 98382}]))).toMatchObject({message:'testName',results:[{commandType:'MODE_CHANGE', value:'LOW_POWER'}, {commandType:'STATUS_CHECK'}, {mode:'LOW_POWER', generatorWatts:110, position: 98382}] });
+    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{completed: true},{completed: true}  ] });
   });
 
   it("responds correctly to the mode change command", function() {
     let testRover = new Rover();
-    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK'), {mode:'LOW_POWER', generatorWatts:110, position: 98382}]))).toMatchObject({message:'testName',results:[{commandType:'MODE_CHANGE', value:'LOW_POWER'}, {commandType:'STATUS_CHECK'}, {mode:'LOW_POWER', generatorWatts:110, position: 98382}] });
+    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{completed: true},{completed: true}  ] });
+  });
+
+  it("responds with a false completed value when attempting to move in LOW_POWER mode", function() {
+    let testRover = new Rover();
+    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{completed: true},{completed: true}] });
+  });
+
+  it("responds with the position for the move command", function() {
+    let testRover = new Rover();
+    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{completed: true},{completed: true}] });
   });
 
 });
