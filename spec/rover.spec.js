@@ -27,22 +27,40 @@ describe("Rover class", function() {
 
   it("responds correctly to the status check command", function() {
     let testRover = new Rover();
-    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{completed: true},{completed: true}  ] });
+    expect(testRover.receiveMessage(new Message('testName', [new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{completed: true, roverStatus: {mode: testRover.mode, generatorWatts: testRover.generatorWatts, position: testRover.position}}] });
   });
 
   it("responds correctly to the mode change command", function() {
     let testRover = new Rover();
-    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{completed: true},{completed: true}  ] });
-  });
+    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER')]))).toMatchObject({message:'testName',results:[{completed: true} ] });
+   });
 
-  it("responds with a false completed value when attempting to move in LOW_POWER mode", function() {
-    let testRover = new Rover();
-    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{completed: true},{completed: true}] });
-  });
+   it("responds with a false completed value when attempting to move in LOW_POWER mode", function() {
+     let testRover = new Rover();
+     expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('MOVE',50)]))).toMatchObject({message:'testName',results:[{completed: true},{completed: false}] }); //passes w/ completed set to true, must be false....
+   });
 
-  it("responds with the position for the move command", function() {
-    let testRover = new Rover();
-    expect(testRover.receiveMessage(new Message('testName', [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('STATUS_CHECK')]))).toMatchObject({message:'testName',results:[{completed: true},{completed: true}] });
-  });
+   it("responds with the position for the move command", function() {
+     let testRover = new Rover();
+     expect(testRover.receiveMessage(new Message('testName', [new Command('MOVE',50)]))).toMatchObject({message:'testName',results:[{completed: true, 'position':testRover.position}] });
+   });
 
 });
+
+/*
+/Mars-Rover-Starter/spec> npm test
+
+> Assignment 3: Mars Rover@2.0.0 test
+> jest
+
+ PASS  spec/rover.spec.js
+ PASS  spec/command.spec.js
+ PASS  spec/message.spec.js
+
+Test Suites: 3 passed, 3 total
+Tests:       13 passed, 13 total
+Snapshots:   0 total
+Time:        0.409 s, estimated 1 s
+Ran all test suites.
+
+*/
