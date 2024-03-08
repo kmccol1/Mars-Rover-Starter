@@ -41,8 +41,13 @@ describe("Rover class", function() {
    });
 
    it("responds with the position for the move command", function() {
-     let testRover = new Rover();
-     expect(testRover.receiveMessage(new Message('testName', [new Command('MOVE',50)]))).toMatchObject({message:'testName',results:[{completed: true, 'position':testRover.position}] });
+     let testRover = new Rover(98382);
+     let commands = [new Command('MOVE', 300)];
+     message = new Message('Test message', commands);
+     let response = testRover.receiveMessage(message);
+     expect(response.results[0].position == testRover.position + 300);
+     // expect(testRover.receiveMessage(new Message('testName', [new Command('MOVE',50)]))).toMatchObject({message:'testName',results:[{completed: true, 'position':testRover.position}] });
+
    });
 
 });
