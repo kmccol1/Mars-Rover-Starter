@@ -1,13 +1,13 @@
 class Rover {
 // Write code here!
-constructor(mode = 'NORMAL', generatorWatts = 110, position = 0)
+constructor(position)
 {
-    this.mode = mode;
+    this.mode = 'NORMAL';
     this.position=position;
     // if (!mode) {
     //   throw Error("Rover mode required.");
     // }
-    this.generatorWatts = generatorWatts;
+    this.generatorWatts = 110;
 }
 
     receiveMessage(message)
@@ -41,7 +41,7 @@ constructor(mode = 'NORMAL', generatorWatts = 110, position = 0)
                     }
                     else
                     {
-                        this.position += (message.commands)[i].value;
+                        this.position = (message.commands)[i].value;
                         result["results"].push({"completed":true, "position":this.position});
                         //console.log("pushing true...");
                     }
