@@ -1,6 +1,6 @@
 class Rover {
 // Write code here!
-constructor(mode = 'NORMAL', generatorWatts = 110, position)
+constructor(mode = 'NORMAL', generatorWatts = 110, position = 0)
 {
     this.mode = mode;
     this.position=position;
@@ -15,14 +15,49 @@ constructor(mode = 'NORMAL', generatorWatts = 110, position)
         // return `message: ${message.name} + results: [${message.commands}]`;
         // let results = message.commands;
         // results.push({mode:this.mode, generatorWatts:this.generatorWatts, position:this.position})
-        let result;
-        if (message.commands[0].commandType == 'STATUS_CHECK')
+        let result = {'message':message.name};
+        // if (message.commands.commandType == 'STATUS_CHECK')
+        // {
+        //     result["results"] = message.commands;
+        // }
+        // if (message.commands[1].commandType == 'MODE_CHANGE')
+        // {
+        //     result["results"] = message.commands;
+        // }
+        if (message.commands != undefined )/*&& message.commands.length > 1)*/
         {
-            result = {message:message.name, results:message.commands};
-        }
-        else
-        {
-            result = {message:message.name, results:message.commands};
+            result["results"] = [];
+            // result["results"] = [];
+            // result["results"].push({});
+            // result["results"].push({});
+            for(let i = 0; i < message.commands.length; i ++)
+            {
+                if((message.commands)[i].commandType == 'MOVE')
+                {
+                    if(this.mode == 'LOW_POWER')
+                    {
+                        result["results"].push({"completed":false});
+                        //console.log("pushing false...");
+                    }
+                    else
+                    {
+                        this.position += (message.commands)[i].value;
+                        result["results"].push({"completed":true, "position":this.position});
+                        //console.log("pushing true...");
+                    }
+                }
+                else if ((message.commands)[i].commandType == 'STATUS_CHECK')
+                {
+                    result["results"].push({"completed": true, "roverStatus": {"mode": this.mode, "generatorWatts": this.generatorWatts, "position": this.position}});
+                    //result["results"].push({"completed":true});
+                }
+                else
+                {
+                    //MODE_CHANGE
+                    this.mode = 'LOW_POWER';
+                    result["results"].push({"completed":true});
+                }
+            }
         }
 
         return result;
